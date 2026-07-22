@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCALEZ Ecosystem</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandBlue: '#0284c7',      /* Premium Sky Blue */
+                        brandLightBlue: '#f0f9ff', /* Soft Background Light Blue */
+                        brandYellow: '#facc15',     /* Vibrant Accent Yellow */
+                        brandDarkBlue: '#0c4a6e',    /* Deep Blue text/headings */
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .view-hidden { display: none !important; }
+    </style>
+</head>
+<body class="bg-brandLightBlue font-sans text-slate-800 antialiased min-h-screen flex flex-col max-w-md mx-auto shadow-2xl border-x border-slate-200">
+
+    <!-- TOP FIXED HEADER -->
+    <header class="bg-white px-4 py-3 sticky top-0 z-40 shadow-sm border-b border-sky-100 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <h1 class="text-2xl font-black tracking-tight text-brandBlue">scalez<span class="text-brandYellow">.</span></h1>
+            <span class="text-[10px] bg-sky-100 text-brandDarkBlue font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Gauteng Local</span>
+        </div>
+    </header>
+
+    <!-- SEARCH BAR SECTION -->
+    <div class="bg-white px-4 py-2 border-b border-sky-100 sticky top-[53px] z-30 shadow-xs">
+        <div class="relative flex items-center">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 pointer-events-none"></i>
+            <input id="global-search" oninput="handleSearch()" type="text" placeholder="Search businesses, keywords (e.g. audio, freight)..." 
+                class="w-full bg-slate-50 text-xs pl-9 pr-8 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-brandBlue focus:bg-white transition-all">
+            <button id="clear-search" onclick="clearSearch()" class="absolute right-3 text-slate-400 hover:text-slate-600 view-hidden">
+                <i data-lucide="x-circle" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN APP WRAPPER (SCROLLABLE CONTAINER) -->
+    <main class="flex-1 overflow-y-auto p-4 pb-24 space-y-4">
+
+        <!-- PAGE 1: PRODUCTS -->
+        <section id="page-products" class="space-y-4">
+            <div class="mb-2">
+                <h2 class="text-xl font-bold text-brandDarkBlue">Local Products</h2>
+                <p class="text-xs text-slate-500">Tap a business card to explore their catalog & profile</p>
+            </div>
+            <div id="container-products" class="space-y-4">
+                <!-- Dynamically Rendered -->
+            </div>
+        </section>
+
+        <!-- PAGE 2: SERVICES -->
+        <section id="page-services" class="space-y-4 view-hidden">
+            <div class="mb-2">
+                <h2 class="text-xl font-bold text-brandDarkBlue">Expert Services</h2>
+                <p class="text-xs text-slate-500">Vetted regional specialists ready to assist you</p>
+            </div>
+            <div id="container-services" class="space-y-4">
+                <!-- Dynamically Rendered -->
+            </div>
+        </section>
+
+        <!-- PAGE 3: EVENTS -->
+        <section id="page-events" class="space-y-4 view-hidden">
+            <div class="mb-2">
+                <h2 class="text-xl font-bold text-brandDarkBlue">Regional Events</h2>
+                <p class="text-xs text-slate-500">What's happening around your area in Gauteng</p>
+            </div>
+            <div id="container-events" class="space-y-4">
+                <!-- Dynamically Rendered -->
+            </div>
+        </section>
+
+        <!-- PAGE 4: USER PROFILE -->
+        <section id="page-profile" class="space-y-4 view-hidden">
+            <div class="bg-white rounded-2xl p-5 border border-sky-100 shadow-sm text-center relative overflow-hidden">
+                <div class="absolute top-0 left-0 right-0 h-16 bg-brandBlue"></div>
+                <div class="relative mt-4">
+                    <div class="w-20 h-20 bg-brandYellow border-4 border-white text-brandDarkBlue rounded-full mx-auto flex items-center justify-center font-black text-2xl shadow-md">J</div>
+                    <h3 class="font-bold text-lg text-brandDarkBlue mt-3">Joshua Naidoo</h3>
+                    <p class="text-xs text-slate-500">System Developer & Entrepreneur</p>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-2 mt-5 text-left text-xs pt-3 border-t border-slate-100">
+                    <div class="bg-brandLightBlue p-3 rounded-xl border border-sky-100">
+                        <p class="text-slate-400 font-medium">Location</p>
+                        <p class="font-bold text-brandDarkBlue mt-0.5">Gauteng, ZA</p>
+                    </div>
+                    <div class="bg-brandLightBlue p-3 rounded-xl border border-sky-100">
+                        <p class="text-slate-400 font-medium">Account Status</p>
+                        <p class="font-bold text-emerald-600 mt-0.5 flex items-center gap-1">● Verified Pro</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-sky-100 shadow-sm divide-y divide-slate-100 overflow-hidden text-xs font-semibold text-slate-700">
+                <div class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-slate-50">
+                    <span class="flex items-center gap-2.5"><i data-lucide="building" class="w-4 h-4 text-brandBlue"></i> My Saved Businesses</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+                </div>
+                <div class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-slate-50">
+                    <span class="flex items-center gap-2.5"><i data-lucide="credit-card" class="w-4 h-4 text-brandBlue"></i> Scalez Subscription</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- INTERACTIVE BUSINESS DETAIL MODAL -->
+    <div id="business-modal" class="fixed inset-0 bg-slate-900/60 z-50 flex items-end justify-center view-hidden p-4">
+        <div class="bg-white w-full max-w-md rounded-t-3xl rounded-b-xl max-h-[88vh] overflow-y-auto shadow-2xl flex flex-col transform transition-transform duration-300">
+            
+            <!-- Modal Header -->
+            <div id="modal-banner" class="p-5 bg-brandDarkBlue text-white relative bg-cover bg-center">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/60 to-transparent"></div>
+                <button onclick="closeBusinessModal()" class="absolute top-4 right-4 bg-white/20 hover:bg-white/30 p-1.5 rounded-full text-white backdrop-blur-md transition-colors z-10">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+                <div class="relative z-10 flex items-center gap-3 mt-2">
+                    <img id="modal-logo" src="" alt="Logo" class="w-14 h-14 rounded-xl object-cover border-2 border-white shadow-md bg-white">
+                    <div>
+                        <div id="modal-badge-container" class="mb-1"></div>
+                        <h2 id="modal-title" class="text-xl font-extrabold tracking-wide leading-tight"></h2>
+                        <p id="modal-tagline" class="text-xs text-sky-200 mt-0.5"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Content -->
+            <div class="p-5 space-y-4 text-xs">
+                <!-- About Section -->
+                <div>
+                    <h4 class="font-bold text-brandDarkBlue uppercase tracking-wider mb-1 text-[11px]">About Us</h4>
+                    <p id="modal-about" class="text-slate-600 leading-relaxed"></p>
+                </div>
+
+                <!-- Contact & Location Box -->
+                <div class="bg-brandLightBlue border border-sky-100 p-3.5 rounded-xl space-y-2.5 text-slate-700 font-medium">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="phone" class="w-4 h-4 text-brandBlue shrink-0"></i>
+                        <span id="modal-phone"></span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-brandBlue shrink-0"></i>
+                        <span id="modal-address"></span>
+                    </div>
+                </div>
+
+                <!-- Direct WhatsApp CTA Button -->
+                <a id="modal-whatsapp-btn" href="#" target="_blank" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md transition-colors text-xs">
+                    <i data-lucide="message-circle" class="w-4 h-4"></i> Chat on WhatsApp
+                </a>
+
+                <!-- Keywords / Tags -->
+                <div>
+                    <h4 class="font-bold text-brandDarkBlue uppercase tracking-wider mb-1.5 text-[11px]">Specialties & Keywords</h4>
+                    <div id="modal-keywords" class="flex flex-wrap gap-1.5"></div>
+                </div>
+
+                <!-- Photo Gallery (Tier Based) -->
+                <div id="modal-gallery-container">
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="font-bold text-brandDarkBlue uppercase tracking-wider text-[11px]">Product & Work Gallery</h4>
+                        <span id="modal-tier-indicator" class="text-[10px] font-bold text-slate-400 uppercase"></span>
+                    </div>
+                    <div id="modal-gallery" class="grid grid-cols-3 gap-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PERSISTENT BOTTOM NAVIGATION BAR -->
+    <nav class="bg-white border-t border-sky-100 fixed bottom-0 left-0 right-0 max-w-md mx-auto h-16 flex shadow-lg z-40">
+        <button onclick="switchPage('products')" id="nav-products" class="flex-1 flex flex-col items-center justify-center text-brandBlue transition-colors font-bold">
+            <i data-lucide="shopping-bag" class="w-5 h-5 mb-0.5"></i>
+            <span class="text-[10px]">Products</span>
+        </button>
+        <button onclick="switchPage('services')" id="nav-services" class="flex-1 flex flex-col items-center justify-center text-slate-400 transition-colors font-semibold">
+            <i data-lucide="wrench" class="w-5 h-5 mb-0.5"></i>
+            <span class="text-[10px]">Services</span>
+        </button>
+        <button onclick="switchPage('events')" id="nav-events" class="flex-1 flex flex-col items-center justify-center text-slate-400 transition-colors font-semibold">
+            <i data-lucide="calendar" class="w-5 h-5 mb-0.5"></i>
+            <span class="text-[10px]">Events</span>
+        </button>
+        <button onclick="switchPage('profile')" id="nav-profile" class="flex-1 flex flex-col items-center justify-center text-slate-400 transition-colors font-semibold">
+            <i data-lucide="user" class="w-5 h-5 mb-0.5"></i>
+            <span class="text-[10px]">Profile</span>
+        </button>
+    </nav>
+
+    <!-- CORE INTERACTIVE LOGIC SCRIPT -->
+    <script>
+        /* ==========================================================================
+           ADMINISTERED BUSINESS REGISTRY
+           To add or edit businesses, modify or append objects to scalezData below.
+           ========================================================================== */
+        const scalezData = [
+            {
+                id: "melodyblooms",
+                type: "products", // 'products' | 'services' | 'events'
+                name: "Melody Blooms Audio",
+                tagline: "Custom Sound Systems & Premium Audio Gear",
+                badge: "Storefront",
+                location: "Pretoria, GP",
+                phone: "27723456789",
+                formattedPhone: "+27 (0) 72 345 6789",
+                address: "Shop 14, Capital Hub, Pretoria, GP",
+                about: "Melody Blooms specialized audio shop delivers high-fidelity sound engineering, acoustic customizations, and specialized audio installations designed to bring pristine clarity and dynamic range to music enthusiasts across Gauteng.",
+                logo: "https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=300&q=80",
+                keywords: ["audio", "sound", "car audio", "speakers", "subwoofer", "amplifiers", "installations"],
+                tier: "pro", // 'pro' (shows photo gallery) | 'standard'
+                photos: [
+                    "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=300&q=80",
+                    "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=300&q=80",
+                    "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=300&q=80"
+                ]
+            },
+            {
+                id: "urbankicks",
+                type: "products",
+                name: "Urban Kicks & Apparel",
+                tagline: "Premium Streetwear, Sneakers & Custom Clothing",
+                badge: "Boutique",
+                location: "Johannesburg, GP",
+                phone: "27834561122",
+                formattedPhone: "+27 (0) 83 456 1122",
+                address: "Braamfontein Yards, Studio 4B, JHB",
+                about: "Urban Kicks brings the latest local and international urban fashion trends straight to Johannesburg. Specializing in high-end streetwear sneakers, custom outerwear, and local design drops, we cater to modern city culture.",
+                logo: "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=300&q=80",
+                keywords: ["shoes", "sneakers", "streetwear", "clothing", "kicks", "fashion"],
+                tier: "pro",
+                photos: [
+                    "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=300&q=80",
+                    "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=300&q=80"
+                ]
+            },
+            {
+                id: "arkonlogistics",
+                type: "services",
+                name: "Arkon Logistics",
+                tagline: "Road Freight, Haulage & Smart Transport Solutions",
+                badge: "Contracted",
+                location: "Midrand, GP",
+                phone: "27119876543",
+                formattedPhone: "+27 (0) 11 987 6543",
+                address: "42 Freight Close, Corporate Park North, Midrand, GP",
+                about: "Arkon Logistics is a fully registered logistics operator focused on local road freight distribution and reliable commercial haulage services. We streamline regional commerce with optimized route tracking, safely bridging carriers with business cargo networks throughout Gauteng.",
+                logo: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=300&q=80",
+                keywords: ["freight", "logistics", "transport", "trucks", "haulage", "cargo", "delivery", "shipping"],
+                tier: "pro",
+                photos: [
+                    "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=300&q=80",
+                    "https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&w=300&q=80"
+                ]
+            },
+            {
+                id: "apextech",
+                type: "services",
+                name: "Apex Tech Solutions",
+                tagline: "Web Development, IT Support & Network Systems",
+                badge: "Verified Pro",
+                location: "Centurion, GP",
+                phone: "27126649001",
+                formattedPhone: "+27 (0) 12 664 9001",
+                address: "Tech Loop, Block C, Centurion, GP",
+                about: "Apex Tech Solutions offers robust tech infrastructure deployment for modern businesses. From crafting fully responsive web ecosystems to configuring safe localized network integrations, our dedicated engineers remove administrative tech barriers to help you scale.",
+                logo: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=300&q=80",
+                keywords: ["web", "development", "it", "code", "software", "networking", "tech", "computers"],
+                tier: "standard",
+                photos: []
+            },
+            {
+                id: "event-smme",
+                type: "events",
+                name: "Gauteng SMME Networking Summit",
+                tagline: "Saturdays @ 09:00 AM",
+                badge: "Summit",
+                location: "Sandton Convention Centre, JHB",
+                phone: "27110001111",
+                formattedPhone: "+27 (0) 11 000 1111",
+                address: "Sandton Convention Centre, JHB",
+                about: "Connect with local business minds, share pitches, and collaborate in the local market hub.",
+                logo: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=300&q=80",
+                keywords: ["networking", "business", "summit", "smme", "gauteng", "event"],
+                tier: "standard",
+                photos: []
+            }
+        ];
+
+        // Initialize icons & rendering on load
+        document.addEventListener("DOMContentLoaded", () => {
+            renderListings();
+            lucide.createIcons();
+        });
+
+        // Core Render Engine
+        function renderListings(filteredData = scalezData) {
+            const productsContainer = document.getElementById('container-products');
+            const servicesContainer = document.getElementById('container-services');
+            const eventsContainer = document.getElementById('container-events');
+
+            productsContainer.innerHTML = '';
+            servicesContainer.innerHTML = '';
+            eventsContainer.innerHTML = '';
+
+            filteredData.forEach(item => {
+                const cardHtml = createCardHtml(item);
+
+                if (item.type === 'products') productsContainer.innerHTML += cardHtml;
+                else if (item.type === 'services') servicesContainer.innerHTML += cardHtml;
+                else if (item.type === 'events') eventsContainer.innerHTML += cardHtml;
+            });
+
+            // Empty state feedback
+            ['products', 'services', 'events'].forEach(type => {
+                const container = document.getElementById(`container-${type}`);
+                if (container.children.length === 0) {
+                    container.innerHTML = `<div class="p-6 text-center text-xs text-slate-400 bg-white rounded-2xl border border-dashed border-slate-200">No ${type} matching your search query.</div>`;
+                }
+            });
+
+            lucide.createIcons();
+        }
+
+        // Card HTML Template Generator
+        function createCardHtml(item) {
+            const defaultLogo = "https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&w=300&q=80";
+            const logoSrc = item.logo || defaultLogo;
+
+            return `
+                <div onclick="openBusinessModal('${item.id}')" class="bg-white rounded-2xl border border-sky-100 shadow-sm overflow-hidden active:scale-[0.99] transition-transform cursor-pointer">
+                    <div class="h-28 bg-slate-800 relative overflow-hidden flex items-center justify-center">
+                        <img src="${logoSrc}" alt="${item.name}" class="w-full h-full object-cover opacity-90">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+                        <span class="absolute bottom-2 left-3 text-white font-black text-xs drop-shadow-md flex items-center gap-1">
+                            ${item.tier === 'pro' ? '<i data-lucide="award" class="w-3.5 h-3.5 text-brandYellow"></i>' : ''}
+                            ${item.name}
+                        </span>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-sm text-brandDarkBlue line-clamp-1">${item.name}</h3>
+                            <span class="bg-brandYellow/20 text-brandDarkBlue text-[10px] font-black px-2 py-0.5 rounded-md border border-brandYellow">${item.badge}</span>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1 line-clamp-1">${item.tagline}</p>
+                        <div class="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 font-medium">
+                            <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-brandBlue"></i> ${item.location}</span>
+                            <span class="text-brandBlue font-bold flex items-center gap-0.5">View Profile <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i></span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Global Search Logic
+        function handleSearch() {
+            const query = document.getElementById('global-search').value.toLowerCase().trim();
+            const clearBtn = document.getElementById('clear-search');
+
+            if (query.length > 0) clearBtn.classList.remove('view-hidden');
+            else clearBtn.classList.add('view-hidden');
+
+            const filtered = scalezData.filter(item => {
+                const nameMatch = item.name.toLowerCase().includes(query);
+                const taglineMatch = item.tagline.toLowerCase().includes(query);
+                const locationMatch = item.location.toLowerCase().includes(query);
+                const keywordMatch = item.keywords.some(kw => kw.toLowerCase().includes(query));
+
+                return nameMatch || taglineMatch || locationMatch || keywordMatch;
+            });
+
+            renderListings(filtered);
+        }
+
+        function clearSearch() {
+            document.getElementById('global-search').value = '';
+            document.getElementById('clear-search').classList.add('view-hidden');
+            renderListings();
+        }
+
+        // Navigation
+        function switchPage(pageKey) {
+            ['products', 'services', 'events', 'profile'].forEach(p => {
+                const element = document.getElementById(`page-${p}`);
+                const navButton = document.getElementById(`nav-${p}`);
+                
+                if (p === pageKey) {
+                    element.classList.remove('view-hidden');
+                    navButton.className = "flex-1 flex flex-col items-center justify-center text-brandBlue transition-colors font-bold";
+                } else {
+                    element.classList.add('view-hidden');
+                    navButton.className = "flex-1 flex flex-col items-center justify-center text-slate-400 transition-colors font-semibold";
+                }
+            });
+        }
+
+        // Modal Logic
+        function openBusinessModal(id) {
+            const data = scalezData.find(item => item.id === id);
+            if (!data) return;
+
+            document.getElementById('modal-title').innerText = data.name;
+            document.getElementById('modal-tagline').innerText = data.tagline;
+            document.getElementById('modal-badge-container').innerHTML = `<span class="bg-brandYellow text-brandDarkBlue text-[9px] font-black px-2 py-0.5 rounded-md border border-brandYellow uppercase">${data.badge}</span>`;
+            document.getElementById('modal-about').innerText = data.about;
+            document.getElementById('modal-phone').innerText = data.formattedPhone || data.phone;
+            document.getElementById('modal-address').innerText = data.address;
+            document.getElementById('modal-logo').src = data.logo || "https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&w=300&q=80";
+
+            // WhatsApp Direct URL with custom prompt
+            const defaultPrompt = encodeURIComponent(`Hi, I saw your business on Scalez. I would like more information on your products or services.`);
+            document.getElementById('modal-whatsapp-btn').href = `https://wa.me/${data.phone}?text=${defaultPrompt}`;
+
+            // Render Keywords
+            const kwContainer = document.getElementById('modal-keywords');
+            kwContainer.innerHTML = '';
+            data.keywords.forEach(kw => {
+                kwContainer.innerHTML += `<span class="bg-sky-50 text-brandBlue font-medium px-2 py-0.5 rounded-md border border-sky-100 text-[10px]">#${kw}</span>`;
+            });
+
+            // Tier Photo Gallery Logic
+            const galleryContainer = document.getElementById('modal-gallery');
+            const tierIndicator = document.getElementById('modal-tier-indicator');
+            galleryContainer.innerHTML = '';
+
+            if (data.tier === 'pro' && data.photos && data.photos.length > 0) {
+                tierIndicator.innerText = "Pro Tier Gallery";
+                data.photos.forEach((photoUrl) => {
+                    galleryContainer.innerHTML += `
+                        <div class="h-20 bg-slate-100 rounded-xl overflow-hidden border border-slate-200">
+                            <img src="${photoUrl}" class="w-full h-full object-cover">
+                        </div>
+                    `;
+                });
+            } else {
+                tierIndicator.innerText = "Standard Tier";
+                galleryContainer.innerHTML = `<p class="col-span-3 text-slate-400 italic py-2">Standard profile listing. Upgrade to Pro Tier to display full photo showcases.</p>`;
+            }
+
+            document.getElementById('business-modal').classList.remove('view-hidden');
+            lucide.createIcons();
+        }
+
+        function closeBusinessModal() {
+            document.getElementById('business-modal').classList.add('view-hidden');
+        }
+    </script>
+</body>
+</html>
+
